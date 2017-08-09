@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>旋转轮播图效果</title>
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <link rel="stylesheet" href="css/demo.css" />
+  <script src="jquery-1.12.2.js"></script>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="slide" id="slide">
+      <ul>
+        <li><img src="img/slidepic1.jpg" alt="" /></li>
+        <li><img src="img/slidepic2.jpg" alt="" /></li>
+        <li><img src="img/slidepic3.jpg" alt="" /></li>
+        <li><img src="img/slidepic4.jpg" alt="" /></li>
+        <li><img src="img/slidepic5.jpg" alt="" /></li>
+      </ul>
+      <div class="arrow">
+        <a href="javascript:;" class="prev"></a>
+        <a href="javascript:;" class="next"></a>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+<script src='./jquery-1.12.2.js'></script>
+<script>
+  $(function () {
+    var arr = [
+      {
+        zIndex: 2,
+        width: '564px',
+        height: '330px',
+        left: '34px',
+        top: 0,
+        opacity: 0
+      },
+      {
+        zIndex: 3,
+        width: '564px',
+        height: '330px',
+        left: '34px',
+        top: '79px',
+        opacity: 0.8
+      },
+      {
+        zIndex: 4,
+        width: '800px',
+        height: '500px',
+        left: '200px',
+        top: '0px',
+        opacity: 1,
+      },
+      {
+        zIndex: 3,
+        width: '564px',
+        height: '330px',
+        left: '605px',
+        top: '79px',
+        opacity: 0.8
+      },
+      {
+        zIndex: 2,
+        width: '564px',
+        height: '330px',
+        left: '605px',
+        top: 0,
+        opacity: 0
+      }
+    ];
+    // 获取元素
+    var lis = $('li');
+    // 一进入给每张图片提娜佳对应数组的样式
+    assign();
+    // 数遍一如移出，按钮实现隐藏
+    $('.wrap').on('mouseenter', function () {
+      $('.arrow').fadeIn(500);
+    })
+    $('.wrap').on('mouseleave', function () {
+      $('.arrow').fadeOut(500);
+    })
+    // 点击按钮实现上下切换
+    // 添加节流阀，需要全部动画结束才进行下一次
+    var flag = true;
+    $('.prev').on('click', function () {
+      // 数组的向前移动一位
+      if (flag) {
+        // 开始动画就把flag改成flase当动画结束再把flag改成true，可以起到节流的作用
+        flag = false;
+        arr.unshift(arr.pop());
+        assign();
+      }
+    })
+    $('.next').on('click', function () {
+      if (flag) {
+        arr.push(arr.shift());
+        assign();
+      }
+    })
+    function assign() {
+      $.each(arr, function (index, ele) {
+        // 得到的是dom对象，需要转换成jq对象
+        lis.eq(index).css('z-index', ele.zIndex).animate(ele, 500, function () {
+          // 回到函数，当全部动画结束才把flag改成true
+          flag = true;
+        });
+      })
+    }
+  })
+
+</script>
